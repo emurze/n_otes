@@ -41,10 +41,10 @@ class JWTAdapter:
     access_token_expire_minutes: int
 
     def _encode_jwt(
-            self,
-            token_type: str,
-            token_data: dict,
-            expire_timedelta: timedelta,
+        self,
+        token_type: str,
+        token_data: dict,
+        expire_timedelta: timedelta,
     ) -> str:
         now = datetime.now(UTC)
         payload = {
@@ -75,11 +75,11 @@ class JWTAdapter:
         return payload
 
     def create_access_token(
-            self,
-            user_id: UUID,
-            username: str,
-            email: str,
-            expire_minutes: Union[int, None] = None,
+        self,
+        user_id: UUID,
+        username: str,
+        email: str,
+        expire_minutes: Union[int, None] = None,
     ) -> str:
         payload = {
             "sub": str(user_id),
@@ -95,9 +95,9 @@ class JWTAdapter:
         )
 
     def create_refresh_token(
-            self,
-            user_id: UUID,
-            expire_days: Union[int, None] = None,
+        self,
+        user_id: UUID,
+        expire_days: Union[int, None] = None,
     ) -> str:
         payload = {
             "sub": str(user_id),
@@ -111,15 +111,15 @@ class JWTAdapter:
         )
 
     def get_refresh_token_payload(
-            self,
-            refresh_token: str,
+        self,
+        refresh_token: str,
     ) -> RefreshTokenPayloadDTO:
         token_data = self._decode_jwt(refresh_token, self.refresh_token_type)
         return RefreshTokenPayloadDTO(**token_data)
 
     def get_access_token_payload(
-            self,
-            access_token: str,
+        self,
+        access_token: str,
     ) -> AccessTokenPayloadDTO:
         token_data = self._decode_jwt(access_token, self.access_token_type)
         return AccessTokenPayloadDTO(**token_data)

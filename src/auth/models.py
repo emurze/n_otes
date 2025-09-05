@@ -7,7 +7,7 @@ from shared.db import Base
 
 
 class User(Base):
-    """Represents a user in the usecases."""
+    """Represents a user in the use cases."""
 
     __tablename__ = "users"
 
