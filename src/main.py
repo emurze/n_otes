@@ -1,3 +1,4 @@
+import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from typing import Any
@@ -11,18 +12,28 @@ from notes.router import router as notes_router
 from config import Config
 from shared.dependencies import get_engine
 
+logger = logging.getLogger(__name__)
+
 
 def create_app(config: Config = Config(), lifespan: Any = None) -> FastAPI:
     """
-    Create and configure a FastAPI usecases with necessary middleware
+    Create and configure a FastAPI use cases with necessary middleware
     and routing, including database and resource management.
     """
+    config.logging.configure()
+    logger.debug("Logging configured")
+    logger.info(
+        "Initializing FastAPI application with title='%s'",
+        config.api.title,
+    )
 
     @asynccontextmanager
     async def default_lifespan(_app: FastAPI) -> AsyncIterator[None]:
+        logger.debug("Starting application lifespan")
         yield
         db_engine = get_engine(config=_app.extra["config"])  # type: ignore
         await db_engine.dispose()
+        logger.debug("Database engine disposed at application shutdown")
 
     app = FastAPI(
         title=config.api.title,
@@ -45,4 +56,5 @@ def create_app(config: Config = Config(), lifespan: Any = None) -> FastAPI:
         minimum_size=config.api.gzip_minimum_size,
         compresslevel=config.api.gzip_compress_level,
     )
+    logger.info("FastAPI application initialized successfully")
     return app
