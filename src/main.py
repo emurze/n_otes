@@ -8,6 +8,7 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.gzip import GZipMiddleware
 
 from auth.router import router as auth_router
+from middlewares import LoggingMiddleware
 from notes.router import router as notes_router
 from config import Config
 from shared.dependencies import get_engine
@@ -56,5 +57,6 @@ def create_app(config: Config = Config(), lifespan: Any = None) -> FastAPI:
         minimum_size=config.api.gzip_minimum_size,
         compresslevel=config.api.gzip_compress_level,
     )
+    app.add_middleware(LoggingMiddleware)
     logger.info("FastAPI application initialized successfully")
     return app

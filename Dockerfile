@@ -25,4 +25,6 @@ RUN useradd -m appuser
 USER appuser
 
 EXPOSE 8080
-CMD bash -c "cd src && uvicorn --factory main:create_app --reload --port 8080 --host 0.0.0.0"
+CMD bash -c "alembic upgrade heads && \
+             cd src && \
+             uvicorn --factory main:create_app --reload --port 8080 --host 0.0.0.0"
