@@ -1,5 +1,5 @@
 import logging
-from typing import Any, NoReturn
+from typing import NoReturn
 from uuid import UUID
 
 from auth.adapters.jwt_adapter import JWTAdapter
@@ -25,7 +25,14 @@ async def refresh_tokens(
         raise UserNotAuthenticatedException(e.message)
 
     async with uow:
-        user: Any = await uow.users.get_by_id(UUID(payload.sub))
+        user = await uow.users.get_by_id(
+            UUID(payload.sub),
+            load_fields=[
+                "id",
+                "username",
+                "email",
+            ],
+        )
 
         if not user:
             raise UserNotAuthenticatedException()

@@ -3,6 +3,9 @@ from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.orm import load_only
+
+from auth.models import User
 
 T = TypeVar("T")
 
@@ -22,9 +25,15 @@ class SqlAlchemyGenericRepository(Generic[T]):
         self,
         entity_id: UUID,
         for_update: bool = False,
+        load_fields: list | None = None,
     ) -> T | None:
         """Retrieve a model by its primary key."""
         query = select(self.model_class).filter_by(id=entity_id)
+
+        if load_fields:
+            query = query.options(
+                load_only(*[getattr(User, field) for field in load_fields])
+            )
 
         if for_update:
             query = query.with_for_update()

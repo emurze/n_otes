@@ -1,7 +1,10 @@
 from typing import NoReturn
 from uuid import UUID
 
-from auth.exceptions import TokenInvalidException, UserNotAuthenticatedException
+from auth.exceptions import (
+    TokenInvalidException,
+    UserNotAuthenticatedException,
+)
 from auth.adapters.jwt_adapter import JWTAdapter
 from auth.services.base import map_user_to_dto, map_user_to_tokens
 from shared.uows import SqlAlchemyUnitOfWork
@@ -19,7 +22,17 @@ async def authenticate_user_by_access_token(
         raise UserNotAuthenticatedException(e.message)
 
     async with uow:
-        user = await uow.users.get_by_id(UUID(payload.sub))  # TODO: load only
+        user = await uow.users.get_by_id(
+            UUID(payload.sub),
+            load_fields=[
+                "id",
+                "name",
+                "surname",
+                "username",
+                "phone_number",
+                "email",
+            ],
+        )
 
         if user is None:
             raise UserNotAuthenticatedException()

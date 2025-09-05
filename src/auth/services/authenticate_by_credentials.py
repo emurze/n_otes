@@ -15,7 +15,15 @@ async def authenticate_user_by_credentials(
     jwt_adapter: JWTAdapter,
 ) -> dict | NoReturn:
     async with uow:
-        user = await uow.users.get_by_username(username)
+        user = await uow.users.get_by_username(
+            username,
+            load_fields=[
+                "id",
+                "username",
+                "email",
+                "password",
+            ],
+        )
 
         if not user:
             raise UserNotAuthenticatedException(
