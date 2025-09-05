@@ -1,9 +1,12 @@
-from typing import Any, Self
+from typing import Any, Self, TYPE_CHECKING
 
-from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import Mapped, relationship
 
 from auth.adapters.password_hash_adapter import PasswordHashAdapter
 from shared.db import Base
+
+if TYPE_CHECKING:
+    from notes.models import Note  # type: ignore
 
 
 class User(Base):
@@ -17,6 +20,11 @@ class User(Base):
     password: Mapped[str]
     phone_number: Mapped[str | None]
     email: Mapped[str]
+    notes: Mapped[list["Note"]] = relationship(
+        "Note",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
 
     @classmethod
     def create(

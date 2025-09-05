@@ -3,6 +3,8 @@ from typing import Self
 
 from auth.models import User
 from auth.adapters.user_repository import UserSqlAlchemyRepository
+from notes.models import Note
+from shared.repositories import SqlAlchemyGenericRepository
 
 
 class SqlAlchemyUnitOfWork:
@@ -14,6 +16,7 @@ class SqlAlchemyUnitOfWork:
     async def __aenter__(self) -> Self:
         self.session = self.session_factory()
         self.users = UserSqlAlchemyRepository(self.session, User)
+        self.notes = SqlAlchemyGenericRepository(self.session, Note)
         return self
 
     async def __aexit__(self, *args) -> None:

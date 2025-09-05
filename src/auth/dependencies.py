@@ -18,7 +18,7 @@ refresh_bearer = HTTPBearer(
     scheme_name="RefreshTokenBearer",
 )
 access_bearer = OAuth2PasswordBearer(
-    tokenUrl="/api/v1/auth/login",
+    tokenUrl="/auth/login",
     scheme_name="AccessTokenBearer",
 )
 
@@ -32,21 +32,21 @@ async def get_refresh_token(
     return refresh_token.credentials
 
 
-# async def get_owner(  # TODO:
-#     uow: SqlAlchemyUnitOfWork = Depends(get_uow),
-#     jwt_adapter: JWTAdapter = Depends(get_jwt_adapter),
-#     access_token: str = Depends(access_bearer),
-# ) -> UserRead:
-#     try:
-#         user_dict = await authenticate_user_by_access_token(
-#             uow=uow,
-#             jwt_adapter=jwt_adapter,
-#             access_token=access_token,
-#             return_tokens=False,
-#         )
-#         return UserRead.model_validate(user_dict)
-#     except UserNotAuthenticatedException as e:
-#         raise HTTPException(
-#             status_code=status.HTTP_401_UNAUTHORIZED,
-#             detail=e.message,
-#         )
+async def get_current_user(
+    uow: SqlAlchemyUnitOfWork = Depends(get_uow),
+    jwt_adapter: JWTAdapter = Depends(get_jwt_adapter),
+    access_token: str = Depends(access_bearer),
+) -> UserRead:
+    try:
+        user_dict = await authenticate_user_by_access_token(
+            uow=uow,
+            jwt_adapter=jwt_adapter,
+            access_token=access_token,
+            return_tokens=False,
+        )
+        return UserRead.model_validate(user_dict)
+    except UserNotAuthenticatedException as e:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=e.message,
+        )

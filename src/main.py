@@ -6,7 +6,8 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.gzip import GZipMiddleware
 
-from auth.router import router
+from auth.router import router as auth_router
+from notes.router import router as notes_router
 from config import Config
 from shared.dependencies import get_engine
 
@@ -30,7 +31,8 @@ def create_app(config: Config = Config(), lifespan: Any = None) -> FastAPI:
         lifespan=lifespan or default_lifespan,
         config=config,
     )
-    app.include_router(router)
+    app.include_router(auth_router)
+    app.include_router(notes_router)
     app.add_middleware(
         CORSMiddleware,  # type: ignore
         allow_origins=config.api.allowed_origins,

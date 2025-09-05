@@ -12,7 +12,8 @@ sys.path.insert(
 
 from config import Config
 from shared.db import Base
-from auth.models import User  # noqa
+from auth.models import User  # type: ignore
+from notes.models import Note  # type: ignore
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
