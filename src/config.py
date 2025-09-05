@@ -10,6 +10,16 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 BASE_DIR: Path = Path(__file__).parent
 
 
+class AuthJWTConfig(BaseModel):
+    secret_key: str
+    algorithm: str = "HS256"
+    access_token_expire_minutes: int = 15
+    refresh_token_expire_days: int = 30
+    token_type_key: str = "type"
+    access_token_type: str = "access"
+    refresh_token_type: str = "refresh"
+
+
 class ApiConfig(BaseModel):
     v1_prefix: str = "/api/v1"
     title: str = "App"
@@ -76,4 +86,5 @@ class Config(BaseSettings):
     api: ApiConfig = Field(default_factory=ApiConfig)
     db: DatabaseConfig = Field(default_factory=DatabaseConfig)
     logging: LoggingConfig = Field(default_factory=LoggingConfig)
+    jwt: AuthJWTConfig = Field(default_factory=AuthJWTConfig)
     debug: bool = True

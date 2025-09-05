@@ -16,7 +16,10 @@ RUN pip install poetry
 RUN poetry config virtualenvs.create false
 RUN poetry install --no-interaction --no-ansi
 
+COPY migrations migrations
 COPY src src
+
+COPY alembic.ini .
 
 RUN useradd -m appuser
 USER appuser

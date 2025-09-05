@@ -26,6 +26,7 @@ services:
       - .env.dev
     volumes:
       - ./src:/service/src
+      - ./migrations:/service/migrations
     restart: unless-stopped
     depends_on:
       db:
