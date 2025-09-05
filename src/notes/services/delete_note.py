@@ -7,7 +7,9 @@ logger = logging.getLogger(__name__)
 
 
 async def delete_note(uow: SqlAlchemyUnitOfWork, note_id: UUID) -> None:
-    """Delete a note by its unique identifier."""
+    """
+    Delete a note by its unique identifier.
+    """
     logger.debug("Attempting to delete note with id='%s'", note_id)
 
     async with uow:
