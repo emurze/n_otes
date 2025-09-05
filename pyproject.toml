@@ -18,11 +18,28 @@ dependencies = [
     "asyncpg (>=0.30.0,<0.31.0)",
     "black (>=25.1.0,<26.0.0)",
     "bcrypt (>=4.3.0,<5.0.0)",
-    "python-multipart (>=0.0.20,<0.0.21)"
+    "python-multipart (>=0.0.20,<0.0.21)",
+    "pytest (>=8.4.2,<9.0.0)",
+    "httpx (>=0.28.1,<0.29.0)",
+    "faker (>=37.6.0,<38.0.0)",
+    "pytest-asyncio (>=1.1.0,<2.0.0)",
 ]
 
 [tool.poetry]
 package-mode = false
+
+[tool.pytest.ini_options]
+pythonpath = [".", "src"]
+filterwarnings = [
+    "ignore::DeprecationWarning:httpx.*"
+]
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+addopts = ["-rsxX", "-l", "--tb=short", "--strict-markers", "-s"]
+xfail_strict = true
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = ["unit", "integration", "e2e"]
+cache_dir = ".venv/cache/pytest"
 
 [tool.black]
 line-length = 79

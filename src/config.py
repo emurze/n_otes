@@ -21,7 +21,6 @@ class AuthJWTConfig(BaseModel):
 
 
 class ApiConfig(BaseModel):
-    v1_prefix: str = "/api/v1"
     title: str = "App"
     docs_url: str = "/docs"
     redoc_url: str = "/redoc"

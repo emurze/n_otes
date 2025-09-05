@@ -4,13 +4,14 @@ from uuid import UUID
 from sqlalchemy import select
 
 from notes.models import Note
+from notes.services.base import map_note_to_dto
 
 
 async def get_user_notes(
     session_factory: Callable,
     user_id: UUID,
-) -> list[Note]:
+) -> list[dict]:
     async with session_factory() as session:
         query = select(Note).where(Note.user_id == user_id)
         result = await session.execute(query)
-        return result.scalars().all()
+        return [map_note_to_dto(item) for item in result.scalars().all()]

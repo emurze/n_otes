@@ -5,10 +5,15 @@ from auth import services
 from auth.adapters.jwt_adapter import JWTAdapter
 from auth.adapters.password_hash_adapter import PasswordHashAdapter
 from auth.dependencies import get_refresh_token
-from auth.exceptions import UserNotAuthenticatedException, UserConflictException
+from auth.exceptions import (
+    UserNotAuthenticatedException,
+    UserConflictException,
+)
 from auth.schemas import TokenRead, UserSignup
 from auth.services import register_user
-from auth.services.authenticate_by_credentials import authenticate_user_by_credentials
+from auth.services.authenticate_by_credentials import (
+    authenticate_user_by_credentials,
+)
 from shared.dependencies import get_uow, get_ph, get_jwt_adapter
 from shared.schemas import ErrorSchema
 from shared.uows import SqlAlchemyUnitOfWork
