@@ -44,6 +44,8 @@ API построен на FastAPI с асинхронной поддержкой
 1. Клонируйте репозиторий:  
     ```bash
     git clone https://github.com/emurze/n_otes.git
+    ```
+    ```bash
     cd n_otes
     ```
 
