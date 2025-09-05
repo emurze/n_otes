@@ -9,6 +9,7 @@ from shared.repositories import SqlAlchemyGenericRepository
 
 class SqlAlchemyUnitOfWork:
     users: UserSqlAlchemyRepository
+    notes: SqlAlchemyGenericRepository
 
     def __init__(self, session_factory: Callable) -> None:
         self.session_factory = session_factory
