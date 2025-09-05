@@ -21,6 +21,9 @@ router = APIRouter(prefix="/notes", tags=["notes"])
     "",
     status_code=status.HTTP_201_CREATED,
     response_model=NoteRead,
+    summary="Create a new note",
+    description="Create a new note for the current authenticated user "
+    "and return it.",
     responses={
         status.HTTP_401_UNAUTHORIZED: {"model": ErrorSchema},
     },
@@ -44,6 +47,8 @@ async def create_note(
     "",
     status_code=status.HTTP_200_OK,
     response_model=list[NoteRead],
+    summary="List all notes",
+    description="Retrieve all notes created by the current authenticated user.",
     responses={
         status.HTTP_401_UNAUTHORIZED: {"model": ErrorSchema},
     },
@@ -60,7 +65,7 @@ async def get_notes(
     status_code=status.HTTP_200_OK,
     response_model=NoteRead,
     summary="Get a note by ID",
-    description="Retrieve a specific note by its ID. ",
+    description="Retrieve a specific note by its ID.",
     responses={
         status.HTTP_401_UNAUTHORIZED: {"model": ErrorSchema},
         status.HTTP_404_NOT_FOUND: {"model": ErrorSchema},
@@ -84,6 +89,9 @@ async def get_note_by_id(
     "/{note_id}",
     status_code=status.HTTP_204_NO_CONTENT,
     response_model=None,
+    summary="Delete a note",
+    description="Delete a note by its ID. "
+    "The note must belong to the current user.",
     responses={
         status.HTTP_401_UNAUTHORIZED: {"model": ErrorSchema},
     },
@@ -100,6 +108,9 @@ async def delete_note(
     "/{note_id}",
     status_code=status.HTTP_200_OK,
     response_model=NoteRead,
+    summary="Update a note",
+    description="Update a note by its ID. "
+    "Only fields provided in the payload are updated.",
     responses={
         status.HTTP_401_UNAUTHORIZED: {"model": ErrorSchema},
         status.HTTP_404_NOT_FOUND: {"model": ErrorSchema},
@@ -112,10 +123,6 @@ async def update_note(
     uow: SqlAlchemyUnitOfWork = Depends(get_uow),
     session_factory: Callable = Depends(get_session_factory),
 ):
-    """
-    Update a note by ID.
-    Only updates fields provided in the payload.
-    """
     try:
         await services.update_note(
             uow=uow,

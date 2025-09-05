@@ -19,9 +19,3 @@ class UserSqlAlchemyRepository(SqlAlchemyGenericRepository[User]):
     async def check_by_email(self, email: str) -> bool:
         query = select(exists().where(self.model_class.email == email))
         return (await self._session.execute(query)).scalar()
-
-    async def check_by_phone_number(self, phone_number: str) -> bool:
-        query = select(
-            exists().where(self.model_class.phone_number == phone_number)
-        )
-        return (await self._session.execute(query)).scalar()

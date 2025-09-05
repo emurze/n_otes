@@ -1,6 +1,6 @@
 from typing import Any, Self, TYPE_CHECKING
 
-from sqlalchemy.orm import Mapped, relationship
+from sqlalchemy.orm import Mapped, relationship, mapped_column
 
 from auth.adapters.password_hash_adapter import PasswordHashAdapter
 from shared.db import Base
@@ -16,10 +16,10 @@ class User(Base):
 
     name: Mapped[str]
     surname: Mapped[str]
-    username: Mapped[str]
+    username: Mapped[str] = mapped_column(index=True)
     password: Mapped[str]
     phone_number: Mapped[str | None]
-    email: Mapped[str]
+    email: Mapped[str] = mapped_column(index=True)
     notes: Mapped[list["Note"]] = relationship(
         "Note",
         back_populates="user",
@@ -45,6 +45,7 @@ class User(Base):
         *,
         ph: PasswordHashAdapter,
     ) -> bool:
+        """Verify a plain-text password against the stored hashed password."""
         return ph.verify_password(password, self.password)
 
     def __repr__(self) -> str:

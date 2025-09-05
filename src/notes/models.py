@@ -13,10 +13,13 @@ if TYPE_CHECKING:
 class Note(Base):
     """Represents a note created by a user."""
 
+    __tablename__ = "notes"
+
     title: Mapped[str]
     content: Mapped[str]
     user_id: Mapped[UUID] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE")
+        ForeignKey("users.id", ondelete="CASCADE"),
+        index=True,
     )
     user: Mapped["User"] = relationship(back_populates="notes")
 
