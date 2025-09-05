@@ -41,3 +41,11 @@ class Base(DeclarativeBase):
         default=func.now(),
         server_default=func.now(),
     )
+
+    def as_dict(self, exclude: set[str] | None = None) -> dict:
+        exclude = exclude or set()
+        return {
+            col: getattr(self, col)
+            for col in self.__mapper__.columns.keys()
+            if col not in exclude
+        }

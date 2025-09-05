@@ -12,7 +12,7 @@ sys.path.insert(
 
 from config import Config
 from shared.db import Base
-from auth.models import User, Note  # noqa
+from auth.models import User  # noqa
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
